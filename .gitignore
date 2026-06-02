@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment — JANGAN commit file ini
+.env
+.env.production
+.env.local
+
+# Logs
+*.log
+logs/
+
+# Coverage
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# TypeORM CLI cache
+ormconfig.json
+
+# Runtime artifacts
+*.cookies
+*.err
+server*.err
+app.err
