@@ -17,7 +17,7 @@ export const databaseConfig = (
   password: configService.get<string>('DB_PASS', 'sera_password'),
   database: configService.get<string>('DB_NAME', 'sera_db'),
   entities: [User, Product, Order, OrderItem, ActivityLog, FailedJob],
-  synchronize: configService.get<string>('NODE_ENV') !== 'production',
+  synchronize: configService.get<string>('DB_SYNC', 'false') === 'true',
   logging: configService.get<string>('NODE_ENV') === 'development',
   ssl: configService.get<string>('DB_SSL', 'false') === 'true'
     ? { rejectUnauthorized: false }
