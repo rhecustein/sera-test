@@ -19,8 +19,7 @@ export const databaseConfig = (
   entities: [User, Product, Order, OrderItem, ActivityLog, FailedJob],
   synchronize: configService.get<string>('NODE_ENV') !== 'production',
   logging: configService.get<string>('NODE_ENV') === 'development',
-  ssl:
-    configService.get<string>('NODE_ENV') === 'production'
-      ? { rejectUnauthorized: false }
-      : false,
+  ssl: configService.get<string>('DB_SSL', 'false') === 'true'
+    ? { rejectUnauthorized: false }
+    : false,
 });
