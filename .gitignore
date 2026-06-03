@@ -33,3 +33,6 @@ ormconfig.json
 *.err
 server*.err
 app.err
+screenshots/
+verify-ui.js
+.env.production

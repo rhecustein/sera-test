@@ -26,8 +26,9 @@ async function bootstrap() {
     }),
   );
 
+  const corsOrigin = configService.get<string>('CORS_ORIGIN', 'http://localhost:60011');
   app.enableCors({
-    origin: configService.get<string>('CORS_ORIGIN', 'http://localhost:60011'),
+    origin: corsOrigin.includes(',') ? corsOrigin.split(',').map(o => o.trim()) : corsOrigin,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
   });
