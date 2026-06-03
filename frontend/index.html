@@ -602,7 +602,7 @@
         <div class="nav-item" onclick="showPage('metrics')">
           <span class="icon">📈</span> Metrics
         </div>
-        <div class="nav-item" onclick="window.open('http://localhost:60010/api', '_blank')">
+        <div class="nav-item" onclick="window.open((window.location.hostname === 'localhost' ? 'http://localhost:60010' : '') + '/api', '_blank')">
           <span class="icon">📖</span> API Docs
         </div>
       </nav>
@@ -879,7 +879,7 @@
 <div id="toast"></div>
 
 <script>
-const API = 'http://localhost:60010';
+const API = window.location.hostname === 'localhost' ? 'http://localhost:60010' : '';
 let token = localStorage.getItem('sera_token') || '';
 let currentUser = (() => { try { return JSON.parse(localStorage.getItem('sera_user') || 'null'); } catch { localStorage.removeItem('sera_user'); return null; } })();
 let productPage = 1, orderPage = 1;

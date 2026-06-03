@@ -47,6 +47,8 @@ services:
       DB_HOST: postgres
       REDIS_HOST: redis
       NODE_ENV: production
+      PORT: 60010
+      CORS_ORIGIN: 'https://sera.bintanx.com'
     ports:
       - '60010:60010'
     depends_on:
@@ -61,6 +63,18 @@ services:
       retries: 3
       start_period: 40s
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production
+    container_name: sera_frontend
+    restart: unless-stopped
+    ports:
+      - '60011:60011'
+    depends_on:
+      - app
+
   nginx:
     image: nginx:alpine
     container_name: sera_nginx
@@ -71,6 +85,7 @@ services:
       - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - app
+      - frontend
 
 volumes:
   postgres_data:
