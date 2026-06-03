@@ -75,7 +75,7 @@ async function bootstrap() {
     )
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, document, {
+  SwaggerModule.setup('api/docs', app, document, {
     customSiteTitle: 'SERA API Docs',
     customCss: `
       .swagger-ui .topbar { background: #1a1a2e; padding: 10px 0; }
@@ -120,6 +120,6 @@ async function bootstrap() {
   const port = configService.get<number>('PORT', 60010);
   await app.listen(port, '0.0.0.0');
   console.log(`SERA Backend running on http://localhost:${port}`);
-  console.log(`Swagger UI: http://localhost:${port}/api`);
+  console.log(`Swagger UI: http://localhost:${port}/api/docs`);
 }
 bootstrap();
