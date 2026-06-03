@@ -1,13 +1,3 @@
-FROM node:20-slim AS builder
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci
-
-COPY . .
-RUN npm run build && npm prune --omit=dev
-
 FROM node:20-slim
 
 WORKDIR /app
@@ -15,9 +5,10 @@ WORKDIR /app
 RUN useradd --system --create-home --home-dir /home/sera --shell /usr/sbin/nologin sera \
     && chown -R sera:sera /app
 
-COPY --from=builder --chown=sera:sera /app/dist ./dist
-COPY --from=builder --chown=sera:sera /app/node_modules ./node_modules
-COPY --from=builder --chown=sera:sera /app/package.json ./
+COPY --chown=sera:sera package*.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+
+COPY --chown=sera:sera dist ./dist
 
 USER sera
 

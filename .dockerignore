@@ -1,5 +1,4 @@
 node_modules
-dist
 coverage
 .git
 .gitignore
@@ -8,3 +7,7 @@ docker-compose*.yml
 .env*
 screenshots
 verify-ui.js
+frontend
+src
+test
+docs
