@@ -1,15 +1,4 @@
-# Stage 1: Build
-FROM node:20-slim AS builder
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci --only=production=false
-
-COPY . .
-RUN npm run build
-
-# Stage 2: Production
-FROM debian:bookworm-slim AS production
+FROM debian:bookworm-slim
 
 WORKDIR /app
 
@@ -19,12 +8,13 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/* \
     && useradd --system --create-home --home-dir /home/sera --shell /usr/sbin/nologin sera \
-    && mkdir -p /app \
     && chown -R sera:sera /app
 
-COPY --from=builder --chown=sera:sera /app/dist ./dist
-COPY --from=builder --chown=sera:sera /app/node_modules ./node_modules
-COPY --from=builder --chown=sera:sera /app/package.json ./
+# Artefak di-build di luar Docker (npm run build), lalu di-copy ke sini
+COPY --chown=sera:sera dist ./dist
+COPY --chown=sera:sera package*.json ./
+
+RUN npm ci --omit=dev && npm cache clean --force
 
 USER sera
 

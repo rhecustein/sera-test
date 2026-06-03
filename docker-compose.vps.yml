@@ -6,20 +6,32 @@ services:
     container_name: sera_redis
     restart: unless-stopped
     network_mode: host
-    command: redis-server --appendonly yes --appendfsync everysec
+    command: redis-server --port 60012 --appendonly yes --appendfsync everysec
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ['CMD', 'redis-cli', '-p', '6379', 'ping']
+      test: ['CMD', 'redis-cli', '-p', '60012', 'ping']
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # Aktifkan jika tidak pakai postgres existing di host
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: sera_postgres
+  #   restart: unless-stopped
+  #   network_mode: host
+  #   env_file:
+  #     - .env.production
+  #   environment:
+  #     PGPORT: 60013
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
 
   app:
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
     container_name: sera_app
     restart: unless-stopped
     network_mode: host
@@ -39,7 +51,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      target: production
     container_name: sera_frontend
     restart: unless-stopped
     network_mode: host
@@ -59,3 +70,4 @@ services:
 
 volumes:
   redis_data:
+  # postgres_data:

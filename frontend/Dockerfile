@@ -1,20 +1,11 @@
-# Stage 1: Build
-FROM node:20-slim AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-# Stage 2: Production
-FROM debian:bookworm-slim AS production
+FROM debian:bookworm-slim
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends nginx \
-    && rm -rf /var/lib/apt/lists/* \
-    && useradd --system --create-home --home-dir /home/sera --shell /usr/sbin/nologin sera
+    && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Artefak di-build di luar Docker (npm run build), lalu di-copy ke sini
+COPY dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 60011
