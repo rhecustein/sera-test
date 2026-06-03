@@ -118,7 +118,7 @@ async function bootstrap() {
   });
 
   const port = configService.get<number>('PORT', 60010);
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
   console.log(`SERA Backend running on http://localhost:${port}`);
   console.log(`Swagger UI: http://localhost:${port}/api`);
 }

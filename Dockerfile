@@ -8,16 +8,11 @@ RUN npm ci
 COPY . .
 RUN npm run build && npm prune --omit=dev
 
-FROM debian:bookworm-slim
+FROM node:20-slim
 
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates curl \
-    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y --no-install-recommends nodejs \
-    && rm -rf /var/lib/apt/lists/* \
-    && useradd --system --create-home --home-dir /home/sera --shell /usr/sbin/nologin sera \
+RUN useradd --system --create-home --home-dir /home/sera --shell /usr/sbin/nologin sera \
     && chown -R sera:sera /app
 
 COPY --from=builder --chown=sera:sera /app/dist ./dist
@@ -29,6 +24,6 @@ USER sera
 EXPOSE 60010
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD curl -fs http://localhost:60010/health || exit 1
+  CMD node -e "require('http').get('http://localhost:60010/health',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"
 
 CMD ["node", "dist/main"]
