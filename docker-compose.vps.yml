@@ -6,11 +6,11 @@ services:
     container_name: sera_redis
     restart: unless-stopped
     network_mode: host
-    command: redis-server --port 60012 --appendonly yes --appendfsync everysec
+    command: redis-server --port 60013 --appendonly yes --appendfsync everysec
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ['CMD', 'redis-cli', '-p', '60012', 'ping']
+      test: ['CMD', 'redis-cli', '-p', '60013', 'ping']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -24,7 +24,7 @@ services:
   #   env_file:
   #     - .env.production
   #   environment:
-  #     PGPORT: 60013
+  #     PGPORT: 60012
   #   volumes:
   #     - postgres_data:/var/lib/postgresql/data
 
